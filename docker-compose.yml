@@ -1,0 +1,23 @@
+version: '3'
+services:
+  samba:
+    build:
+        context: .
+        dockerfile: samba.dockerfile
+    container_name: samba
+    hostname: samba
+    volumes:
+      - /opt:/mnt
+    ports:
+      - "139:139"
+      - "445:445"
+      - "137:137/udp"
+      - "138:138/udp"
+    restart: always
+  linuz:
+    depends_on:
+      - samba
+    build:
+      context: .
+      dockerfile: alpine.dockerfile
+    privileged: true
